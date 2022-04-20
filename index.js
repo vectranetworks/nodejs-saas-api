@@ -33,35 +33,43 @@ module.exports = class SaasClient {
 
   //Get token from OAuth2
   async #getToken() {
-    const token = Buffer.from(
-      `${this.#clientID}:${this.#secret}`,
-      "utf8"
-    ).toString("base64");
-    let data = await axios({
-      url: `${this.#siteURL}/oauth2/token`,
-      method: "POST",
-      headers: {
-        Authorization: `Basic ${token}`,
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      data: "grant_type=client_credentials",
-    });
-    //Set time that token expires
-    this.#tokenRefresh = Math.floor(Date.now() / 1000) + data.data.expires_in;
-    return data.data.access_token;
+    try {
+      const token = Buffer.from(
+        `${this.#clientID}:${this.#secret}`,
+        "utf8"
+      ).toString("base64");
+      let data = await axios({
+        url: `${this.#siteURL}/oauth2/token`,
+        method: "POST",
+        headers: {
+          Authorization: `Basic ${token}`,
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        data: "grant_type=client_credentials",
+      });
+      //Set time that token expires
+      this.#tokenRefresh = Math.floor(Date.now() / 1000) + data.data.expires_in;
+      return data.data.access_token;
+    } catch (err) {
+      throw err;
+    }
   }
 
   //Check that a token exists and is still valid.
   async #checkToken() {
-    if (!this.#token || this.#tokenRefresh < Math.floor(Date.now() / 1000)) {
-      this.#token = await this.#getToken();
+    try {
+      if (!this.#token || this.#tokenRefresh < Math.floor(Date.now() / 1000)) {
+        this.#token = await this.#getToken();
+      }
+      await this.#sleep(this.#sleepTime);
+      return true;
+    } catch (err) {
+      throw err;
     }
-    await this.#sleep(this.#sleepTime);
-    return true;
   }
 
   //Get data from API
-  async #get(url, full = false) {
+  async #get(url) {
     try {
       await this.#checkToken();
       let query = await axios({
@@ -73,11 +81,15 @@ module.exports = class SaasClient {
       });
       return query.data;
     } catch (err) {
-      throw {
-        status: err.response.status,
-        statusText: err.response.statusText,
-        url: err.response.config.url,
-      };
+      if (err.response) {
+        throw {
+          status: err.response.status,
+          statusText: err.response.statusText,
+          url: err.response.config.url,
+        };
+      } else {
+        throw err;
+      }
     }
   }
 
@@ -97,11 +109,15 @@ module.exports = class SaasClient {
       });
       return data.data;
     } catch (err) {
-      throw {
-        status: err.response.status,
-        statusText: err.response.statusText,
-        url: err.response.config.url,
-      };
+      if (err.response) {
+        throw {
+          status: err.response.status,
+          statusText: err.response.statusText,
+          url: err.response.config.url,
+        };
+      } else {
+        throw err;
+      }
     }
   }
 
@@ -119,11 +135,15 @@ module.exports = class SaasClient {
       });
       return data.data;
     } catch (err) {
-      throw {
-        status: err.response.status,
-        statusText: err.response.statusText,
-        url: err.response.config.url,
-      };
+      if (err.response) {
+        throw {
+          status: err.response.status,
+          statusText: err.response.statusText,
+          url: err.response.config.url,
+        };
+      } else {
+        throw err;
+      }
     }
   }
 
@@ -143,11 +163,15 @@ module.exports = class SaasClient {
       });
       return data.data;
     } catch (err) {
-      throw {
-        status: err.response.status,
-        statusText: err.response.statusText,
-        url: err.response.config.url,
-      };
+      if (err.response) {
+        throw {
+          status: err.response.status,
+          statusText: err.response.statusText,
+          url: err.response.config.url,
+        };
+      } else {
+        throw err;
+      }
     }
   }
 
@@ -164,11 +188,15 @@ module.exports = class SaasClient {
       });
       return data.data;
     } catch (err) {
-      throw {
-        status: err.response.status,
-        statusText: err.response.statusText,
-        url: err.response.config.url,
-      };
+      if (err.response) {
+        throw {
+          status: err.response.status,
+          statusText: err.response.statusText,
+          url: err.response.config.url,
+        };
+      } else {
+        throw err;
+      }
     }
   }
 
@@ -242,10 +270,11 @@ module.exports = class SaasClient {
     try {
       let extra = "";
       //Add options into URL string
-      for (let option of Object.keys(options)) {
-        extra += `&${option}=${options[option]}`;
+      if (options) {
+        for (let option of Object.keys(options)) {
+          extra += `&${option}=${options[option]}`;
+        }
       }
-
       let results = [];
       let data = {
         next: `/detections?page=1${extra}`,
@@ -439,8 +468,10 @@ module.exports = class SaasClient {
     try {
       let extra = "";
       //Add options into URL string
-      for (let option of Object.keys(options)) {
-        extra += `&${option}=${options[option]}`;
+      if (options) {
+        for (let option of Object.keys(options)) {
+          extra += `&${option}=${options[option]}`;
+        }
       }
       let results = [];
       let data = {
