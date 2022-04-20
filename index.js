@@ -280,7 +280,10 @@ module.exports = class SaasClient {
         next: `/detections?page=1${extra}`,
       };
       while (data.next) {
-        data = await this.#get(data.next.replace(/.*vectra.ai/, ""), true);
+        data = await this.#get(
+          data.next.replace(/.*vectra.ai\/api\/v3/, ""),
+          true
+        );
         results = results.concat(data.results);
       }
       return results;
@@ -478,7 +481,10 @@ module.exports = class SaasClient {
         next: `/accounts?page=1${extra}`,
       };
       while (data.next) {
-        data = await this.#get(data.next.replace(/.*vectra.ai/, ""), true);
+        data = await this.#get(
+          data.next.replace(/.*vectra.ai\/api\/v3/, ""),
+          true
+        );
         results = results.concat(data.results);
       }
       return results;
@@ -704,7 +710,10 @@ module.exports = class SaasClient {
         next: `/assignments`,
       };
       while (data.next) {
-        data = await this.#get(data.next.replace(/.*vectra.ai/, ""), true);
+        data = await this.#get(
+          data.next.replace(/.*vectra.ai\/api\/v3/, ""),
+          true
+        );
         results = results.concat(data.results);
       }
       return results;
