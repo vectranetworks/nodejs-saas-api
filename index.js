@@ -62,74 +62,114 @@ module.exports = class SaasClient {
 
   //Get data from API
   async #get(url, full = false) {
-    await this.#checkToken();
-    let query = await axios({
-      url: `${this.#siteURL}/api/v3${url}`,
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${this.#token}`,
-      },
-    });
-    return query.data;
+    try {
+      await this.#checkToken();
+      let query = await axios({
+        url: `${this.#siteURL}/api/v3${url}`,
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${this.#token}`,
+        },
+      });
+      return query.data;
+    } catch (err) {
+      throw {
+        status: err.response.status,
+        statusText: err.response.statusText,
+        url: err.response.config.url,
+      };
+    }
   }
 
   //Post data to API
   async #post(url, body) {
-    await this.#checkToken();
+    try {
+      await this.#checkToken();
 
-    console.log(this.#token);
-    let data = await axios({
-      url: `${this.#siteURL}/api/v3${url}`,
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${this.#token}`,
-      },
-      data: body,
-    });
-    return data.data;
+      console.log(this.#token);
+      let data = await axios({
+        url: `${this.#siteURL}/api/v3${url}`,
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${this.#token}`,
+        },
+        data: body,
+      });
+      return data.data;
+    } catch (err) {
+      throw {
+        status: err.response.status,
+        statusText: err.response.statusText,
+        url: err.response.config.url,
+      };
+    }
   }
 
   //Patch data to API
   async #patch(url, body) {
-    await this.#checkToken();
-    let data = await axios({
-      url: `${this.#siteURL}/api/v3${url}`,
-      method: "PATCH",
-      headers: {
-        Authorization: `Bearer ${this.#token}`,
-      },
-      data: body,
-    });
-    return data.data;
+    try {
+      await this.#checkToken();
+      let data = await axios({
+        url: `${this.#siteURL}/api/v3${url}`,
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${this.#token}`,
+        },
+        data: body,
+      });
+      return data.data;
+    } catch (err) {
+      throw {
+        status: err.response.status,
+        statusText: err.response.statusText,
+        url: err.response.config.url,
+      };
+    }
   }
 
   //Post data to API
   async #put(url, body) {
-    await this.#checkToken();
+    try {
+      await this.#checkToken();
 
-    console.log(this.#token);
-    let data = await axios({
-      url: `${this.#siteURL}/api/v3${url}`,
-      method: "PUT",
-      headers: {
-        Authorization: `Bearer ${this.#token}`,
-      },
-      data: body,
-    });
-    return data.data;
+      console.log(this.#token);
+      let data = await axios({
+        url: `${this.#siteURL}/api/v3${url}`,
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${this.#token}`,
+        },
+        data: body,
+      });
+      return data.data;
+    } catch (err) {
+      throw {
+        status: err.response.status,
+        statusText: err.response.statusText,
+        url: err.response.config.url,
+      };
+    }
   }
 
   //Delete data from API
   async #delete(url) {
-    await this.#checkToken();
-    let data = await axios({
-      url: `${this.#siteURL}/api/v3${url}`,
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${this.#token}`,
-      },
-    });
-    return data.data;
+    try {
+      await this.#checkToken();
+      let data = await axios({
+        url: `${this.#siteURL}/api/v3${url}`,
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${this.#token}`,
+        },
+      });
+      return data.data;
+    } catch (err) {
+      throw {
+        status: err.response.status,
+        statusText: err.response.statusText,
+        url: err.response.config.url,
+      };
+    }
   }
 
   /**
@@ -138,18 +178,22 @@ module.exports = class SaasClient {
    * @returns {Promise} Array containing all account changes since the provided checkpoint.
    */
   async getAccountChanges(checkpoint = 0) {
-    let results = [];
-    let data = {
-      remaining_count: 1,
-      next_checkpoint: checkpoint,
-    };
-    while (data.remaining_count > 0) {
-      data = await this.#get(
-        `/events/account_scoring?limit=1000&since=${data.next_checkpoint}`
-      );
-      results = results.concat(data.events);
+    try {
+      let results = [];
+      let data = {
+        remaining_count: 1,
+        next_checkpoint: checkpoint,
+      };
+      while (data.remaining_count > 0) {
+        data = await this.#get(
+          `/events/account_scoring?limit=1000&since=${data.next_checkpoint}`
+        );
+        results = results.concat(data.events);
+      }
+      return results;
+    } catch (err) {
+      throw err;
     }
-    return results;
   }
 
   /**
@@ -158,18 +202,22 @@ module.exports = class SaasClient {
    * @returns {Promise} Array containing all account changes since the provided checkpoint.
    */
   async getDetectionChanges(checkpoint = 0) {
-    let results = [];
-    let data = {
-      remaining_count: 1,
-      next_checkpoint: checkpoint,
-    };
-    while (data.remaining_count > 0) {
-      data = await this.#get(
-        `/events/account_detection?limit=1000&since=${data.next_checkpoint}`
-      );
-      results = results.concat(data.events);
+    try {
+      let results = [];
+      let data = {
+        remaining_count: 1,
+        next_checkpoint: checkpoint,
+      };
+      while (data.remaining_count > 0) {
+        data = await this.#get(
+          `/events/account_detection?limit=1000&since=${data.next_checkpoint}`
+        );
+        results = results.concat(data.events);
+      }
+      return results;
+    } catch (err) {
+      throw err;
     }
-    return results;
   }
 
   /**
@@ -178,7 +226,11 @@ module.exports = class SaasClient {
    * @returns {Promise} Object containing all the data on the detection.
    */
   async getDetection(detectionID) {
-    return await this.#get(`/detections/${detectionID}`);
+    try {
+      return await this.#get(`/detections/${detectionID}`);
+    } catch (err) {
+      throw err;
+    }
   }
 
   /**
@@ -187,21 +239,25 @@ module.exports = class SaasClient {
    * @returns {Promise} Array containing all detection objects.
    */
   async getAllDetections(options) {
-    let extra = "";
-    //Add options into URL string
-    for (let option of Object.keys(options)) {
-      extra += `&${option}=${options[option]}`;
-    }
+    try {
+      let extra = "";
+      //Add options into URL string
+      for (let option of Object.keys(options)) {
+        extra += `&${option}=${options[option]}`;
+      }
 
-    let results = [];
-    let data = {
-      next: `/detections?page=1${extra}`,
-    };
-    while (data.next) {
-      data = await this.#get(data.next.replace(/.*vectra.ai/, ""), true);
-      results = results.concat(data.results);
+      let results = [];
+      let data = {
+        next: `/detections?page=1${extra}`,
+      };
+      while (data.next) {
+        data = await this.#get(data.next.replace(/.*vectra.ai/, ""), true);
+        results = results.concat(data.results);
+      }
+      return results;
+    } catch (err) {
+      throw err;
     }
-    return results;
   }
 
   /**
@@ -210,7 +266,11 @@ module.exports = class SaasClient {
    * @returns {Promise} Array of objects containing details of the notes.
    */
   async getDetectionNotes(detectionID) {
-    return await this.#get(`/detections/${detectionID}/notes`);
+    try {
+      return await this.#get(`/detections/${detectionID}/notes`);
+    } catch (err) {
+      throw err;
+    }
   }
 
   /**
@@ -220,7 +280,11 @@ module.exports = class SaasClient {
    * @returns {Promise} Object containing details of the note.
    */
   async getDetectionNote(detectionID, noteID) {
-    return await this.#get(`/detections/${detectionID}/notes/${noteID}`);
+    try {
+      return await this.#get(`/detections/${detectionID}/notes/${noteID}`);
+    } catch (err) {
+      throw err;
+    }
   }
 
   /**
@@ -230,7 +294,11 @@ module.exports = class SaasClient {
    * @returns {Promise} Object containing details of the new note.
    */
   async addDetectionNote(id, note) {
-    return await this.#post(`/detections/${id}/notes`, { note: note });
+    try {
+      return await this.#post(`/detections/${id}/notes`, { note: note });
+    } catch (err) {
+      throw err;
+    }
   }
 
   /**
@@ -241,9 +309,13 @@ module.exports = class SaasClient {
    * @returns {Promise} Object containing details of the new note.
    */
   async updateDetectionNote(detectionID, noteID, note) {
-    return await this.#patch(`/detections/${detectionID}/notes/${noteID}`, {
-      note: note,
-    });
+    try {
+      return await this.#patch(`/detections/${detectionID}/notes/${noteID}`, {
+        note: note,
+      });
+    } catch (err) {
+      throw err;
+    }
   }
 
   /**
@@ -253,7 +325,11 @@ module.exports = class SaasClient {
    * @returns {Promise} Object containing details of the deleted note.
    */
   async deleteDetectionNote(detectionID, noteID) {
-    return await this.#delete(`/detections/${detectionID}/notes/${noteID}`);
+    try {
+      return await this.#delete(`/detections/${detectionID}/notes/${noteID}`);
+    } catch (err) {
+      throw err;
+    }
   }
 
   /**
@@ -262,8 +338,12 @@ module.exports = class SaasClient {
    * @returns {Promise} Array of tags in text form.
    */
   async getDetectionTags(detectionID) {
-    let data = await this.#get(`/tagging/detection/${detectionID}`);
-    return data.tags;
+    try {
+      let data = await this.#get(`/tagging/detection/${detectionID}`);
+      return data.tags;
+    } catch (err) {
+      throw err;
+    }
   }
 
   /**
@@ -273,11 +353,15 @@ module.exports = class SaasClient {
    * @returns {Promise} Object containing details of the new tags.
    */
   async addDetectionTags(detectionID, tags) {
-    let existingTags = await this.getDetectionTags(detectionID);
-    tags = tags.concat(existingTags.tags);
-    return await this.#patch(`/tagging/detection/${detectionID}`, {
-      tags: tags,
-    });
+    try {
+      let existingTags = await this.getDetectionTags(detectionID);
+      tags = tags.concat(existingTags.tags);
+      return await this.#patch(`/tagging/detection/${detectionID}`, {
+        tags: tags,
+      });
+    } catch (err) {
+      throw err;
+    }
   }
 
   /**
@@ -287,15 +371,19 @@ module.exports = class SaasClient {
    * @returns {Promise} Object containing details of the deleted tag.
    */
   async deleteDetectionTag(detectionID, tag) {
-    let existingTags = await this.getDetectionTags(detectionID);
-    for (let i = existingTags.tags.length - 1; i >= 0; i--) {
-      if (existingTags.tags[i] == tag) {
-        existingTags.tags.splice(i, 1);
+    try {
+      let existingTags = await this.getDetectionTags(detectionID);
+      for (let i = existingTags.tags.length - 1; i >= 0; i--) {
+        if (existingTags.tags[i] == tag) {
+          existingTags.tags.splice(i, 1);
+        }
       }
+      return await this.#patch(`/tagging/detection/${detectionID}`, {
+        tags: existingTags.tags,
+      });
+    } catch (err) {
+      throw err;
     }
-    return await this.#patch(`/tagging/detection/${detectionID}`, {
-      tags: existingTags.tags,
-    });
   }
 
   /**
@@ -304,9 +392,13 @@ module.exports = class SaasClient {
    * @returns {Promise} Object containing details of the cleared tags.
    */
   async clearDetectionTags(detectionID) {
-    return await this.#patch(`/tagging/detection/${detectionID}`, {
-      tags: [],
-    });
+    try {
+      return await this.#patch(`/tagging/detection/${detectionID}`, {
+        tags: [],
+      });
+    } catch (err) {
+      throw err;
+    }
   }
 
   /**
@@ -315,10 +407,14 @@ module.exports = class SaasClient {
    * @returns {Promise} Object containing details of fixed detections.
    */
   async markAsFixed(detectionIDs) {
-    return await this.#patch(`/detections`, {
-      detectionIdList: detectionIDs,
-      mark_as_fixed: true,
-    });
+    try {
+      return await this.#patch(`/detections`, {
+        detectionIdList: detectionIDs,
+        mark_as_fixed: true,
+      });
+    } catch (err) {
+      throw err;
+    }
   }
 
   /**
@@ -327,7 +423,11 @@ module.exports = class SaasClient {
    * @returns {Promise} Object containing all the data on the account.
    */
   async getAccount(accountID) {
-    return await this.#get(`/accounts/${accountID}`);
+    try {
+      return await this.#get(`/accounts/${accountID}`);
+    } catch (err) {
+      throw err;
+    }
   }
 
   /**
@@ -336,20 +436,24 @@ module.exports = class SaasClient {
    * @returns {Promise} Array containing all account objects.
    */
   async getAllAccounts(options) {
-    let extra = "";
-    //Add options into URL string
-    for (let option of Object.keys(options)) {
-      extra += `&${option}=${options[option]}`;
+    try {
+      let extra = "";
+      //Add options into URL string
+      for (let option of Object.keys(options)) {
+        extra += `&${option}=${options[option]}`;
+      }
+      let results = [];
+      let data = {
+        next: `/accounts?page=1${extra}`,
+      };
+      while (data.next) {
+        data = await this.#get(data.next.replace(/.*vectra.ai/, ""), true);
+        results = results.concat(data.results);
+      }
+      return results;
+    } catch (err) {
+      throw err;
     }
-    let results = [];
-    let data = {
-      next: `/accounts?page=1${extra}`,
-    };
-    while (data.next) {
-      data = await this.#get(data.next.replace(/.*vectra.ai/, ""), true);
-      results = results.concat(data.results);
-    }
-    return results;
   }
 
   /**
@@ -359,7 +463,11 @@ module.exports = class SaasClient {
    * @returns {Promise} Object containing details of the new note.
    */
   async addAccountNote(accountID, note) {
-    return await this.#post(`/accounts/${accountID}/notes`, { note: note });
+    try {
+      return await this.#post(`/accounts/${accountID}/notes`, { note: note });
+    } catch (err) {
+      throw err;
+    }
   }
 
   /**
@@ -368,7 +476,11 @@ module.exports = class SaasClient {
    * @returns {Promise} Array of objects containing details of the notes.
    */
   async getAccountNotes(accountID) {
-    return await this.#get(`/accounts/${accountID}/notes`);
+    try {
+      return await this.#get(`/accounts/${accountID}/notes`);
+    } catch (err) {
+      throw err;
+    }
   }
 
   /**
@@ -378,7 +490,11 @@ module.exports = class SaasClient {
    * @returns {Promise} Object containing details of the note.
    */
   async getAccountNote(accountID, noteID) {
-    return await this.#get(`/accounts/${accountID}/notes/${noteID}`);
+    try {
+      return await this.#get(`/accounts/${accountID}/notes/${noteID}`);
+    } catch (err) {
+      throw err;
+    }
   }
 
   /**
@@ -389,9 +505,13 @@ module.exports = class SaasClient {
    * @returns {Promise} Object containing details of the new note.
    */
   async updateAccountNote(accountID, noteID, note) {
-    return await this.#patch(`/accounts/${accountID}/notes/${noteID}`, {
-      note: note,
-    });
+    try {
+      return await this.#patch(`/accounts/${accountID}/notes/${noteID}`, {
+        note: note,
+      });
+    } catch (err) {
+      throw err;
+    }
   }
 
   /**
@@ -401,7 +521,11 @@ module.exports = class SaasClient {
    * @returns {Promise} Object containing details of the deleted note.
    */
   async deleteAccountNote(accountID, noteID) {
-    return await this.#delete(`/accounts/${accountID}/notes/${noteID}`);
+    try {
+      return await this.#delete(`/accounts/${accountID}/notes/${noteID}`);
+    } catch (err) {
+      throw err;
+    }
   }
 
   /**
@@ -410,8 +534,12 @@ module.exports = class SaasClient {
    * @returns {Promise} Array of tags in text form.
    */
   async getAccountTags(accountID) {
-    let data = await this.#get(`/tagging/account/${accountID}`);
-    return data.tags;
+    try {
+      let data = await this.#get(`/tagging/account/${accountID}`);
+      return data.tags;
+    } catch (err) {
+      throw err;
+    }
   }
 
   /**
@@ -421,11 +549,15 @@ module.exports = class SaasClient {
    * @returns {Promise} Object containing details of the new tags.
    */
   async addAccountTags(accountID, tags) {
-    let existingTags = await this.getAccountTags(accountID);
-    tags = tags.concat(existingTags);
-    return await this.#patch(`/tagging/account/${accountID}`, {
-      tags: tags,
-    });
+    try {
+      let existingTags = await this.getAccountTags(accountID);
+      tags = tags.concat(existingTags);
+      return await this.#patch(`/tagging/account/${accountID}`, {
+        tags: tags,
+      });
+    } catch (err) {
+      throw err;
+    }
   }
 
   /**
@@ -435,15 +567,19 @@ module.exports = class SaasClient {
    * @returns {Promise} Object containing details of the deleted tag.
    */
   async deleteAccountTag(accountID, tag) {
-    let existingTags = await this.getAccountTags(accountID);
-    for (let i = existingTags.tags.length - 1; i >= 0; i--) {
-      if (existingTags.tags[i] == tag) {
-        existingTags.tags.splice(i, 1);
+    try {
+      let existingTags = await this.getAccountTags(accountID);
+      for (let i = existingTags.tags.length - 1; i >= 0; i--) {
+        if (existingTags.tags[i] == tag) {
+          existingTags.tags.splice(i, 1);
+        }
       }
+      return await this.#patch(`/tagging/account/${accountID}`, {
+        tags: existingTags.tags,
+      });
+    } catch (err) {
+      throw err;
     }
-    return await this.#patch(`/tagging/account/${accountID}`, {
-      tags: existingTags.tags,
-    });
   }
 
   /**
@@ -452,9 +588,13 @@ module.exports = class SaasClient {
    * @returns {Promise} Object containing details of the cleared tags.
    */
   async clearAccountTags(accountID) {
-    return await this.#patch(`/tagging/account/${accountID}`, {
-      tags: [],
-    });
+    try {
+      return await this.#patch(`/tagging/account/${accountID}`, {
+        tags: [],
+      });
+    } catch (err) {
+      throw err;
+    }
   }
 
   /**
@@ -462,7 +602,11 @@ module.exports = class SaasClient {
    * @returns {Promise} Array of objects containing details of the triage rules.
    */
   async getTriageRules() {
-    return await this.#get(`/rules`);
+    try {
+      return await this.#get(`/rules`);
+    } catch (err) {
+      throw err;
+    }
   }
 
   /**
@@ -471,7 +615,11 @@ module.exports = class SaasClient {
    * @returns {Promise} Object containing details of the triage rule.
    */
   async getTriageRule(ruleID) {
-    return await this.#get(`/rules/${ruleID}`);
+    try {
+      return await this.#get(`/rules/${ruleID}`);
+    } catch (err) {
+      throw err;
+    }
   }
 
   /**
@@ -480,7 +628,11 @@ module.exports = class SaasClient {
    * @returns {Promise} Object containing details of the new triage rule.
    */
   async createTriageRule(rule) {
-    return await this.#post("/rules", rule);
+    try {
+      return await this.#post("/rules", rule);
+    } catch (err) {
+      throw err;
+    }
   }
 
   /**
@@ -490,7 +642,11 @@ module.exports = class SaasClient {
    * @returns {Promise} Object containing details of the updated triage rule.
    */
   async updateTriageRule(ruleID, rule) {
-    return await this.#put("/rules", ruleID, rule);
+    try {
+      return await this.#put("/rules", ruleID, rule);
+    } catch (err) {
+      throw err;
+    }
   }
 
   /**
@@ -499,6 +655,129 @@ module.exports = class SaasClient {
    * @returns {Promise} Object containing details of the deleted triage rule.
    */
   async deleteTriageRule(ruleID) {
-    return await this.#delete(`/rules${ruleID}`);
+    try {
+      return await this.#delete(`/rules${ruleID}`);
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  /**
+   * Get all account Assignments.
+   * @returns {Promise} Array of objects containing details of assignments.
+   */
+  async getAssignments() {
+    try {
+      let results = [];
+      let data = {
+        next: `/assignments`,
+      };
+      while (data.next) {
+        data = await this.#get(data.next.replace(/.*vectra.ai/, ""), true);
+        results = results.concat(data.results);
+      }
+      return results;
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  /**
+   * Get a specific account Assignment.
+   * @param {number} assignmentID - ID of the assignment to be retrieved.
+   * @returns {Promise} Object containing details of an assignment.
+   */
+  async getAssignment(assignmentID) {
+    try {
+      return await this.#get(`/assignments/${assignmentID}`);
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  /**
+   * Get a list of all user accounts in the system.
+   * @returns {Promise} Array of objects containing details of all user accounts.
+   */
+  async getUsers() {
+    try {
+      return await this.#get(`/users`);
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  /**
+   * Get a list of all user accounts in the system.
+   * @returns {Promise} Array of objects containing details of all user accounts.
+   * @param {number} userID - ID of the user account to be retrieved.
+   */
+  async getUsers(userID) {
+    try {
+      return await this.#get(`/users/${userID}`);
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  /**
+   * Get a list of all user accounts in the system.
+   * @returns {Promise} Array of objects containing details of all user accounts.
+   * @param {number} userID - ID of the user account to be retrieved.
+   */
+  async getUsers(userID) {
+    try {
+      return await this.#get(`/users/${userID}`);
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  /**
+   * Assign an account to a specific user.
+   * @param {number} accountID - ID of the account to be assigned.
+   * @param {number} userID - ID of the user the account will be assigned to.
+   * @returns {Promise} Object containing details of the assignment.
+   */
+  async assignAccount(accountID, userID) {
+    try {
+      return await this.#post(`/assignments`, {
+        assign_account_id: accountID,
+        assign_to_user_id: userID,
+      });
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  /**
+   * Modify or reassign an existing assignment.
+   * @param {number} assignmentID - ID of the assignment to be modified.
+   * @param {number} accountID - ID of the account to be assigned.
+   * @param {number} userID - ID of the user the account will be assigned to.
+   * @returns {Promise} Object containing details of the modified assignment.
+   */
+  async modifyAssignment(assignmentID, accountID, userID) {
+    try {
+      return await this.#put(`/assignments/${assignmentID}`, {
+        assign_account_id: accountID,
+        assign_to_user_id: userID,
+      });
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  /**
+   * Delete an existing assignment.
+   * @param {number} assignmentID - ID of the assignment to be deleted.
+   * @returns {Promise} Object containing details of the deleted assignment.
+   */
+  async modifyAssignment(assignmentID) {
+    try {
+      return await this.#delete(`/assignments/${assignmentID}`);
+    } catch (err) {
+      throw err;
+    }
   }
 };

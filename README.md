@@ -18,15 +18,24 @@ All functions of this client are asynchronous and so require either Promises or 
 For example, to retrieve all detections on your brain with a Threat score greater than 1, you would use the following functions:
 
 ```
-client.getAllDetections({t_score_gte: 1}).then((results)=>{
+client
+  .getAllDetections({ t_score_gte: 1 })
+  .then((results) => {
     //Do something with the results
-})
+  })
+  .catch((err) => {
+    //Handle error
+  });
 ```
 
 #### OR
 
 ```
-let results = await client.getAllDetections({t_score_gte: 1})
+try {
+  let results = await client.getAllDetections({ t_score_gte: 1 });
+} catch (err) {
+  //Handle error
+}
 ```
 
 ---
@@ -36,8 +45,6 @@ let results = await client.getAllDetections({t_score_gte: 1})
 ## SaaSClient(siteURL, clientID, secret)
 
 Creates a new SaaS Client Object.
-
-## Constructor
 
 #### new SaaSClient(siteURL, clientID, secret)
 
@@ -110,6 +117,21 @@ Add tags to a detection.
 ##### Returns:
 
 Object containing details of the new tags.
+
+#### (async) assignAccount(accountID, userID) → {Promise}
+
+Assign an account to a specific user.
+
+##### Parameters:
+
+| Name        | Type   | Description                                     |
+| ----------- | ------ | ----------------------------------------------- |
+| `accountID` | number | ID of the account to be assigned.               |
+| `userID`    | number | ID of the user the account will be assigned to. |
+
+##### Returns:
+
+Object containing details of the assignment.
 
 #### (async) clearAccountTags(accountID) → {Promise}
 
@@ -241,7 +263,7 @@ Return a specific account based on the ID
 
 Object containing all the data on the account.
 
-#### (async) getAccountChanges(checkpointopt) → {Promise}
+#### (async) getAccountChanges(checkpoint?) → {Promise}
 
 Get account changes from a specific checkpoint
 
@@ -326,6 +348,28 @@ Return all detections
 
 Array containing all detection objects.
 
+#### (async) getAssignment(assignmentID) → {Promise}
+
+Get a specific account Assignment.
+
+##### Parameters:
+
+| Name           | Type   | Description                           |
+| -------------- | ------ | ------------------------------------- |
+| `assignmentID` | number | ID of the assignment to be retrieved. |
+
+##### Returns:
+
+Object containing details of an assignment.
+
+#### (async) getAssignments() → {Promise}
+
+Get all account Assignments.
+
+##### Returns:
+
+Array of objects containing details of assignments.
+
 #### (async) getDetection(detectionID) → {Promise}
 
 Return a specific detection based on the ID
@@ -340,16 +384,15 @@ Return a specific detection based on the ID
 
 Object containing all the data on the detection.
 
-#### (async) getDetectionChanges(checkpointopt) → {Promise}
+#### (async) getDetectionChanges(checkpoint?) → {Promise}
 
 Get detection changes from a specific checkpoint
 
 ##### Parameters:
 
-Name | Type | Attributes | Default |
-Description`checkpoint` | number | optional |
--|-|-|-|-
-| tarting point to retrieve changes from (0 by default).
+| Name         | Type   | Attributes | Default | Description                                             |
+| ------------ | ------ | ---------- | ------- | ------------------------------------------------------- |
+| `checkpoint` | number | optional   | 0       | Starting point to retrieve changes from (0 by default). |
 
 ##### Returns:
 
@@ -420,6 +463,42 @@ Return all triage rules on the brain.
 
 Array of objects containing details of the triage rules.
 
+#### (async) getUsers() → {Promise}
+
+Get a list of all user accounts in the system.
+
+##### Returns:
+
+Array of objects containing details of all user accounts.
+
+#### (async) getUsers(userID) → {Promise}
+
+Get a list of all user accounts in the system.
+
+##### Parameters:
+
+| Name     | Type   | Description                             |
+| -------- | ------ | --------------------------------------- |
+| `userID` | number | ID of the user account to be retrieved. |
+
+##### Returns:
+
+Array of objects containing details of all user accounts.
+
+#### (async) getUsers(userID) → {Promise}
+
+Get a list of all user accounts in the system.
+
+##### Parameters:
+
+| Name     | Type   | Description                             |
+| -------- | ------ | --------------------------------------- |
+| `userID` | number | ID of the user account to be retrieved. |
+
+##### Returns:
+
+Array of objects containing details of all user accounts.
+
 #### (async) markAsFixed(detectionIDs) → {Promise}
 
 Mark specific detections as fixed.
@@ -433,6 +512,36 @@ Mark specific detections as fixed.
 ##### Returns:
 
 Object containing details of fixed detections.
+
+#### (async) modifyAssignment(assignmentID, accountID, userID) → {Promise}
+
+Modify or reassign an existing assignment.
+
+##### Parameters:
+
+| Name           | Type   | Description                                     |
+| -------------- | ------ | ----------------------------------------------- |
+| `assignmentID` | number | ID of the assignment to be modified.            |
+| `accountID`    | number | ID of the account to be assigned.               |
+| `userID`       | number | ID of the user the account will be assigned to. |
+
+##### Returns:
+
+Object containing details of the modified assignment.
+
+#### (async) modifyAssignment(assignmentID) → {Promise}
+
+Delete an existing assignment.
+
+##### Parameters:
+
+| Name           | Type   | Description                         |
+| -------------- | ------ | ----------------------------------- |
+| `assignmentID` | number | ID of the assignment to be deleted. |
+
+##### Returns:
+
+Object containing details of the deleted assignment.
 
 #### (async) updateAccountNote(accountID, noteID, note) → {Promise}
 
