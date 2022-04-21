@@ -225,6 +225,36 @@ module.exports = class SaasClient {
   }
 
   /**
+   * Retrieve the last checkpoint for Account changes
+   * @returns {Promise} Number showing the latest Account change checkpoint in the system.
+   */
+  async getLatestAccountCheckpoint() {
+    try {
+      let data = await this.#get(
+        `/events/account_scoring?limit=1000&since=999999999999`
+      );
+      return data.next_checkpoint;
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  /**
+   * Retrieve the last checkpoint for Detection changes
+   * @returns {Promise} Number showing the latest Detection change checkpoint in the system.
+   */
+  async getLatestDetectionCheckpoint() {
+    try {
+      let data = await this.#get(
+        `/events/account_detection?limit=1000&since=999999999999`
+      );
+      return data.next_checkpoint;
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  /**
    * Get detection changes from a specific checkpoint
    * @param {number} [checkpoint] - Starting point to retrieve changes from (0 by default).
    * @returns {Promise} Array containing all account changes since the provided checkpoint.
@@ -748,24 +778,11 @@ module.exports = class SaasClient {
   }
 
   /**
-   * Get a list of all user accounts in the system.
-   * @returns {Promise} Array of objects containing details of all user accounts.
+   * Get a specific user account in the system.
+   * @returns {Promise} Object containing details of the requested user account.
    * @param {number} userID - ID of the user account to be retrieved.
    */
-  async getUsers(userID) {
-    try {
-      return await this.#get(`/users/${userID}`);
-    } catch (err) {
-      throw err;
-    }
-  }
-
-  /**
-   * Get a list of all user accounts in the system.
-   * @returns {Promise} Array of objects containing details of all user accounts.
-   * @param {number} userID - ID of the user account to be retrieved.
-   */
-  async getUsers(userID) {
+  async getUser(userID) {
     try {
       return await this.#get(`/users/${userID}`);
     } catch (err) {
