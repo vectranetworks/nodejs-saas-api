@@ -48,7 +48,8 @@ module.exports = class SaasClient {
         data: "grant_type=client_credentials",
       });
       //Set time that token expires
-      this.#tokenRefresh = Math.floor(Date.now() / 1000) + data.data.expires_in;
+      this.#tokenRefresh =
+        Math.floor(Date.now() / 1000) + data.data.expires_in - 100;
       return data.data.access_token;
     } catch (err) {
       throw err;
@@ -97,8 +98,6 @@ module.exports = class SaasClient {
   async #post(url, body) {
     try {
       await this.#checkToken();
-
-      console.log(this.#token);
       let data = await axios({
         url: `${this.#siteURL}/api/v3${url}`,
         method: "POST",
@@ -151,8 +150,6 @@ module.exports = class SaasClient {
   async #put(url, body) {
     try {
       await this.#checkToken();
-
-      console.log(this.#token);
       let data = await axios({
         url: `${this.#siteURL}/api/v3${url}`,
         method: "PUT",
@@ -233,6 +230,9 @@ module.exports = class SaasClient {
       let data = await this.#get(
         `/events/account_scoring?limit=1000&since=999999999999`
       );
+      data = await this.#get(
+        `/events/account_scoring?limit=1000&since=${data.next_checkpoint}`
+      );
       return data.next_checkpoint;
     } catch (err) {
       throw err;
@@ -247,6 +247,9 @@ module.exports = class SaasClient {
     try {
       let data = await this.#get(
         `/events/account_detection?limit=1000&since=999999999999`
+      );
+      data = await this.#get(
+        `/events/account_detection?limit=1000&since=${data.next_checkpoint}`
       );
       return data.next_checkpoint;
     } catch (err) {
@@ -417,7 +420,7 @@ module.exports = class SaasClient {
   async addDetectionTags(detectionID, tags) {
     try {
       let existingTags = await this.getDetectionTags(detectionID);
-      tags = tags.concat(existingTags.tags);
+      tags = tags.concat(existingTags);
       return await this.#patch(`/tagging/detection/${detectionID}`, {
         tags: tags,
       });
