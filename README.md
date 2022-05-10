@@ -249,6 +249,21 @@ Delete an existing triage rule.
 
 Object containing details of the deleted triage rule.
 
+#### (async) filterDetection(detectionIDs, value) → {Promise}
+
+Filter detections with a specific value.
+
+##### Parameters:
+
+| Name           | Type           | Description                                   |
+| -------------- | -------------- | --------------------------------------------- |
+| `detectionIDs` | Array.<number> | Array of detection IDs to be marked as fixed. |
+| `value`        | text           | Value of the new detection subject.           |
+
+##### Returns:
+
+Object containing details of filtered detections.
+
 #### (async) getAccount(accountID) → {Promise}
 
 Return a specific account based on the ID

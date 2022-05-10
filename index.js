@@ -483,6 +483,23 @@ module.exports = class SaasClient {
   }
 
   /**
+   * Filter detections with a specific value.
+   * @param {number[]} detectionIDs - Array of detection IDs to be marked as fixed.
+   * @param {text} value - Value of the new detection subject
+   * @returns {Promise} Object containing details of filtered detections.
+   */
+  async filterDetection(detectionIDs, value) {
+    try {
+      return await this.#post(`/rules`, {
+        detectionIdList: detectionIDs,
+        triage_category: value,
+      });
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  /**
    * Return a specific account based on the ID
    * @param {number} accountID - ID of the account.
    * @returns {Promise} Object containing all the data on the account.
