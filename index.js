@@ -134,15 +134,7 @@ module.exports = class SaasClient {
       });
       return data.data;
     } catch (err) {
-      if (err.response) {
-        throw {
-          status: err.response.status,
-          statusText: err.response.statusText,
-          url: err.response.config.url,
-        };
-      } else {
-        throw err;
-      }
+      throw err;
     }
   }
 
@@ -173,7 +165,7 @@ module.exports = class SaasClient {
   }
 
   //Delete data from API
-  async #delete(url) {
+  async #delete(url, body) {
     try {
       await this.#checkToken();
       let data = await axios({
@@ -182,18 +174,11 @@ module.exports = class SaasClient {
         headers: {
           Authorization: `Bearer ${this.#token}`,
         },
+        data: body,
       });
       return data.data;
     } catch (err) {
-      if (err.response) {
-        throw {
-          status: err.response.status,
-          statusText: err.response.statusText,
-          url: err.response.config.url,
-        };
-      } else {
-        throw err;
-      }
+      throw err;
     }
   }
 
@@ -211,7 +196,7 @@ module.exports = class SaasClient {
       };
       while (data.remaining_count > 0) {
         data = await this.#get(
-          `/events/account_scoring?limit=1000&since=${data.next_checkpoint}`
+          `/events/account_scoring?limit=1000&from=${data.next_checkpoint}`
         );
         results = results.concat(data.events);
       }
@@ -228,10 +213,10 @@ module.exports = class SaasClient {
   async getLatestAccountCheckpoint() {
     try {
       let data = await this.#get(
-        `/events/account_scoring?limit=1000&since=999999999999`
+        `/events/account_scoring?limit=1000&from=999999999999`
       );
       data = await this.#get(
-        `/events/account_scoring?limit=1000&since=${data.next_checkpoint}`
+        `/events/account_scoring?limit=1000&from=${data.next_checkpoint}`
       );
       return data.next_checkpoint;
     } catch (err) {
@@ -246,10 +231,10 @@ module.exports = class SaasClient {
   async getLatestDetectionCheckpoint() {
     try {
       let data = await this.#get(
-        `/events/account_detection?limit=1000&since=999999999999`
+        `/events/account_detection?limit=1000&from=999999999999`
       );
       data = await this.#get(
-        `/events/account_detection?limit=1000&since=${data.next_checkpoint}`
+        `/events/account_detection?limit=1000&from=${data.next_checkpoint}`
       );
       return data.next_checkpoint;
     } catch (err) {
@@ -271,7 +256,7 @@ module.exports = class SaasClient {
       };
       while (data.remaining_count > 0) {
         data = await this.#get(
-          `/events/account_detection?limit=1000&since=${data.next_checkpoint}`
+          `/events/account_detection?limit=1000&from=${data.next_checkpoint}`
         );
         results = results.concat(data.events);
       }
@@ -438,13 +423,13 @@ module.exports = class SaasClient {
   async deleteDetectionTag(detectionID, tag) {
     try {
       let existingTags = await this.getDetectionTags(detectionID);
-      for (let i = existingTags.tags.length - 1; i >= 0; i--) {
-        if (existingTags.tags[i] == tag) {
-          existingTags.tags.splice(i, 1);
+      for (let i = existingTags.length - 1; i >= 0; i--) {
+        if (existingTags[i] == tag) {
+          existingTags.splice(i, 1);
         }
       }
       return await this.#patch(`/tagging/detection/${detectionID}`, {
-        tags: existingTags.tags,
+        tags: existingTags,
       });
     } catch (err) {
       throw err;
@@ -475,7 +460,23 @@ module.exports = class SaasClient {
     try {
       return await this.#patch(`/detections`, {
         detectionIdList: detectionIDs,
-        mark_as_fixed: true,
+        mark_as_fixed: "True",
+      });
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  /**
+   * Unmark specific detections as fixed.
+   * @param {number[]} detectionIDs - Array of detection IDs to be unmarked as fixed.
+   * @returns {Promise} Object containing details of fixed detections.
+   */
+  async unmarkAsFixed(detectionIDs) {
+    try {
+      return await this.#patch(`/detections`, {
+        detectionIdList: detectionIDs,
+        mark_as_fixed: "False",
       });
     } catch (err) {
       throw err;
@@ -493,6 +494,22 @@ module.exports = class SaasClient {
       return await this.#post(`/rules`, {
         detectionIdList: detectionIDs,
         triage_category: value,
+      });
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  /**
+   * Unfilter detections with a specific value.
+   * @param {number[]} detectionIDs - Array of detection IDs to be unmarked as fixed.
+   * @returns {Promise} Object containing details of filtered detections.
+   */
+  async unfilterDetection(detectionIDs) {
+    try {
+      console.log(detectionIDs);
+      return await this.#delete(`/rules`, {
+        detectionIdList: detectionIDs,
       });
     } catch (err) {
       throw err;
@@ -656,13 +673,13 @@ module.exports = class SaasClient {
   async deleteAccountTag(accountID, tag) {
     try {
       let existingTags = await this.getAccountTags(accountID);
-      for (let i = existingTags.tags.length - 1; i >= 0; i--) {
-        if (existingTags.tags[i] == tag) {
-          existingTags.tags.splice(i, 1);
+      for (let i = existingTags.length - 1; i >= 0; i--) {
+        if (existingTags[i] == tag) {
+          existingTags.splice(i, 1);
         }
       }
       return await this.#patch(`/tagging/account/${accountID}`, {
-        tags: existingTags.tags,
+        tags: existingTags,
       });
     } catch (err) {
       throw err;
