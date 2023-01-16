@@ -280,6 +280,19 @@ module.exports = class SaasClient {
   }
 
   /**
+   * Return specific detections based on an array of detection IDs
+   * @param {number[]} detectionID - IDs of the detections.
+   * @returns {Promise} Object containing all the data on the detection.
+   */
+  async getDetections(detectionIDs) {
+    try {
+      return await this.#get(`/detections/${detectionIDs.join(",")}`);
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  /**
    * Return all detections
    * @param {object} options - Search options.
    * @returns {Promise} Array containing all detection objects.
@@ -524,6 +537,19 @@ module.exports = class SaasClient {
   async getAccount(accountID) {
     try {
       return await this.#get(`/accounts/${accountID}`);
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  /**
+   * Return specific accounts based on an array of account IDs
+   * @param {number[]} accountID - IDs of the accounts.
+   * @returns {Promise} Object containing all the data on the account.
+   */
+  async getAccounts(accountIDs) {
+    try {
+      return await this.#get(`/accounts/${accountIDs.join(",")}`);
     } catch (err) {
       throw err;
     }
