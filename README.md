@@ -278,6 +278,20 @@ Return a specific account based on the ID
 
 Object containing all the data on the account.
 
+#### (async) getAccounts(accountIDs) → {Promise}
+
+Return accounts based on an array of account IDs
+
+##### Parameters:
+
+| Name         | Type     | Description          |
+| ------------ | -------- | -------------------- |
+| `accountIDs` | number[] | IDs of the accounts. |
+
+##### Returns:
+
+Array containing all accounts specified.
+
 #### (async) getAccountChanges(checkpoint?) → {Promise}
 
 Get account changes from a specific checkpoint
@@ -398,6 +412,20 @@ Return a specific detection based on the ID
 ##### Returns:
 
 Object containing all the data on the detection.
+
+#### (async) getDetections(detectionIDs) → {Promise}
+
+Return detections based on an array of detection IDs
+
+##### Parameters:
+
+| Name           | Type     | Description            |
+| -------------- | -------- | ---------------------- |
+| `detectionIDs` | number[] | IDs of the detections. |
+
+##### Returns:
+
+Array containing all detections specified.
 
 #### (async) getDetectionChanges(checkpoint?) → {Promise}
 

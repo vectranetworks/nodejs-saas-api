@@ -280,7 +280,7 @@ module.exports = class SaasClient {
   }
 
   /**
-   * Return specific detections based on an array of detection IDs
+   * Return detections based on an array of detection IDs
    * @param {number[]} detectionID - IDs of the detections.
    * @returns {Promise} Object containing all the data on the detection.
    */
@@ -555,7 +555,7 @@ module.exports = class SaasClient {
   }
 
   /**
-   * Return specific accounts based on an array of account IDs
+   * Return accounts based on an array of account IDs
    * @param {number[]} accountID - IDs of the accounts.
    * @returns {Promise} Object containing all the data on the account.
    */
