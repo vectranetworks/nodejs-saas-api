@@ -286,7 +286,19 @@ module.exports = class SaasClient {
    */
   async getDetections(detectionIDs) {
     try {
-      return await this.#get(`/detections/${detectionIDs.join(",")}`);
+      let results = [];
+      let data = {
+        next: `/detections/?id=${detectionIDs.join(",")}`,
+      };
+
+      while (data.next) {
+        data = await this.#get(
+          data.next.replace(/.*vectra.ai\/api\/v3/, ""),
+          true
+        );
+        results = results.concat(data.results);
+      }
+      return results;
     } catch (err) {
       throw err;
     }
@@ -549,7 +561,19 @@ module.exports = class SaasClient {
    */
   async getAccounts(accountIDs) {
     try {
-      return await this.#get(`/accounts/${accountIDs.join(",")}`);
+      let results = [];
+      let data = {
+        next: `/accounts/?id=${accountIDs.join(",")}`,
+      };
+
+      while (data.next) {
+        data = await this.#get(
+          data.next.replace(/.*vectra.ai\/api\/v3/, ""),
+          true
+        );
+        results = results.concat(data.results);
+      }
+      return results;
     } catch (err) {
       throw err;
     }
