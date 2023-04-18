@@ -10,16 +10,19 @@ module.exports = class SaasClient {
   #secret = null;
   #sleepTime = 500;
   #token = null;
+  #version = null;
 
   /**
    * @param {string} siteURL - The URL Where your SaaS Brain is located. e.g. https://000000000000.foo.portal.vectra.ai
    * @param {string} clientID - OAuth Client ID. Generated in Manage/API Clients.
    * @param {string} secret - OAuth Secret. Generated in Manage/API Clients.
+   * @param {number} version - API Version. Defaults to 3.
    */
-  constructor(siteURL, clientID, secret) {
+  constructor(siteURL, clientID, secret, version = 3) {
     this.#siteURL = siteURL;
     this.#clientID = clientID;
     this.#secret = secret;
+    this.#version = `v${version}`;
   }
 
   //Sleep for a period of time
@@ -74,7 +77,7 @@ module.exports = class SaasClient {
     try {
       await this.#checkToken();
       let query = await axios({
-        url: `${this.#siteURL}/api/v3${url}`,
+        url: `${this.#siteURL}/api/${this.#version}${url}`,
         method: "GET",
         headers: {
           Authorization: `Bearer ${this.#token}`,
@@ -99,7 +102,7 @@ module.exports = class SaasClient {
     try {
       await this.#checkToken();
       let data = await axios({
-        url: `${this.#siteURL}/api/v3${url}`,
+        url: `${this.#siteURL}/api/${this.#version}${url}`,
         method: "POST",
         headers: {
           Authorization: `Bearer ${this.#token}`,
@@ -125,7 +128,7 @@ module.exports = class SaasClient {
     try {
       await this.#checkToken();
       let data = await axios({
-        url: `${this.#siteURL}/api/v3${url}`,
+        url: `${this.#siteURL}/api/${this.#version}${url}`,
         method: "PATCH",
         headers: {
           Authorization: `Bearer ${this.#token}`,
@@ -143,7 +146,7 @@ module.exports = class SaasClient {
     try {
       await this.#checkToken();
       let data = await axios({
-        url: `${this.#siteURL}/api/v3${url}`,
+        url: `${this.#siteURL}/api/${this.#version}${url}`,
         method: "PUT",
         headers: {
           Authorization: `Bearer ${this.#token}`,
@@ -169,7 +172,7 @@ module.exports = class SaasClient {
     try {
       await this.#checkToken();
       let data = await axios({
-        url: `${this.#siteURL}/api/v3${url}`,
+        url: `${this.#siteURL}/api/${this.#version}${url}`,
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${this.#token}`,
@@ -293,7 +296,7 @@ module.exports = class SaasClient {
 
       while (data.next) {
         data = await this.#get(
-          data.next.replace(/.*vectra.ai\/api\/v3/, ""),
+          data.next.replace(/.*vectra.ai\/api\/v3[^\/]*/, ""),
           true
         );
         results = results.concat(data.results);
@@ -324,7 +327,7 @@ module.exports = class SaasClient {
       };
       while (data.next) {
         data = await this.#get(
-          data.next.replace(/.*vectra.ai\/api\/v3/, ""),
+          data.next.replace(/.*vectra.ai\/api\/v3[^\/]*/, ""),
           true
         );
         results = results.concat(data.results);
@@ -568,7 +571,7 @@ module.exports = class SaasClient {
 
       while (data.next) {
         data = await this.#get(
-          data.next.replace(/.*vectra.ai\/api\/v3/, ""),
+          data.next.replace(/.*vectra.ai\/api\/v3[^\/]*/, ""),
           true
         );
         results = results.concat(data.results);
@@ -599,7 +602,7 @@ module.exports = class SaasClient {
       };
       while (data.next) {
         data = await this.#get(
-          data.next.replace(/.*vectra.ai\/api\/v3/, ""),
+          data.next.replace(/.*vectra.ai\/api\/v3[^\/]*/, ""),
           true
         );
         results = results.concat(data.results);
@@ -683,6 +686,78 @@ module.exports = class SaasClient {
   }
 
   /**
+   * Add a note to a specific host.
+   * @param {number} hostID - The ID of the host.
+   * @param {text} note - The text body of the note.
+   * @returns {Promise} Object containing details of the new note.
+   */
+  async addHostNote(hostID, note) {
+    try {
+      return await this.#post(`/hosts/${hostID}/notes`, { note: note });
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  /**
+   * Return the notes for a specific host.
+   * @param {number} hostID - The ID of the host.
+   * @returns {Promise} Array of objects containing details of the notes.
+   */
+  async getHostNotes(hostID) {
+    try {
+      return await this.#get(`/hosts/${hostID}/notes`);
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  /**
+   * Return a specific note for a host.
+   * @param {number} hostID - The ID of the host.
+   * @param {number} noteID - The ID of the note.
+   * @returns {Promise} Object containing details of the note.
+   */
+  async getHostNote(hostID, noteID) {
+    try {
+      return await this.#get(`/hosts/${hostID}/notes/${noteID}`);
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  /**
+   * Updated a specific note for a host.
+   * @param {number} hostID - The ID of the host.
+   * @param {number} noteID - The ID of the note.
+   * @param {text} note - The text body to update the note with.
+   * @returns {Promise} Object containing details of the new note.
+   */
+  async updateHostNote(hostID, noteID, note) {
+    try {
+      return await this.#patch(`/hosts/${hostID}/notes/${noteID}`, {
+        note: note,
+      });
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  /**
+   * Delete a specific note for a host.
+   * @param {number} hostID - The ID of the host.
+   * @param {number} noteID - The ID of the note.
+   * @returns {Promise} Object containing details of the deleted note.
+   */
+  async deleteHostNote(hostID, noteID) {
+    try {
+      return await this.#delete(`/hosts/${hostID}/notes/${noteID}`);
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  /**
    * Get tags for a specific account.
    * @param {number} accountID - The ID of the account.
    * @returns {Promise} Array of tags in text form.
@@ -744,6 +819,75 @@ module.exports = class SaasClient {
   async clearAccountTags(accountID) {
     try {
       return await this.#patch(`/tagging/account/${accountID}`, {
+        tags: [],
+      });
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  /**
+   * Get tags for a specific host.
+   * @param {number} hostID - The ID of the host.
+   * @returns {Promise} Array of tags in text form.
+   */
+  async getHostTags(hostID) {
+    try {
+      let data = await this.#get(`/tagging/host/${hostID}`);
+      return data.tags;
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  /**
+   * Add tags to a host.
+   * @param {number} hostID - The ID of the host.
+   * @param {text[]} tags - Array of tags to add.
+   * @returns {Promise} Object containing details of the new tags.
+   */
+  async addHostTags(hostID, tags) {
+    try {
+      let existingTags = await this.getHostTags(hostID);
+      tags = tags.concat(existingTags);
+      return await this.#patch(`/tagging/host/${hostID}`, {
+        tags: tags,
+      });
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  /**
+   * Delete a tag from a specific host.
+   * @param {number} hostID - The ID of the host.
+   * @param {text} tag - Value of the tag to be deleted.
+   * @returns {Promise} Object containing details of the deleted tag.
+   */
+  async deleteHostTag(hostID, tag) {
+    try {
+      let existingTags = await this.getHostTags(hostID);
+      for (let i = existingTags.length - 1; i >= 0; i--) {
+        if (existingTags[i] == tag) {
+          existingTags.splice(i, 1);
+        }
+      }
+      return await this.#patch(`/tagging/host/${hostID}`, {
+        tags: existingTags,
+      });
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  /**
+   * Clear all tags from a specific host.
+   * @param {number} hostID - The ID of the host.
+   * @returns {Promise} Object containing details of the cleared tags.
+   */
+  async clearHostTags(hostID) {
+    try {
+      return await this.#patch(`/tagging/host/${hostID}`, {
         tags: [],
       });
     } catch (err) {
@@ -828,7 +972,7 @@ module.exports = class SaasClient {
       };
       while (data.next) {
         data = await this.#get(
-          data.next.replace(/.*vectra.ai\/api\/v3/, ""),
+          data.next.replace(/.*vectra.ai\/api\/v3[^\/]*/, ""),
           true
         );
         results = results.concat(data.results);

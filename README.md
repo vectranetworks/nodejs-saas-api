@@ -42,11 +42,11 @@ try {
 
 # Full API Client Documentation
 
-## SaaSClient(siteURL, clientID, secret)
+## SaaSClient(siteURL, clientID, secret, version)
 
 Creates a new SaaS Client Object.
 
-#### new SaaSClient(siteURL, clientID, secret)
+#### new SaaSClient(siteURL, clientID, secret, version)
 
 ##### Parameters:
 
@@ -55,6 +55,7 @@ Creates a new SaaS Client Object.
 | `siteURL`  | string | The URL Where your SaaS Brain is located. e.g. https://000000000000.foo.portal.vectra.ai |
 | `clientID` | string | OAuth Client ID. Generated in Manage/API Clients.                                        |
 | `secret`   | string | OAuth Secret. Generated in Manage/API Clients.                                           |
+| `version`  | number | API Version number. Defaults to 3. 3.3 and above support Hosts endpoints                 |
 
 ### Methods
 
