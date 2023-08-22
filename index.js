@@ -997,12 +997,73 @@ module.exports = class SaasClient {
   }
 
   /**
+   * Get a specific account Assignment.
+   * @param {number} accountID - ID of the account to be retrieve assignments for.
+   * @param {boolean} resolved - If true, return resolved assignments.
+   * @returns {Promise} Object containing details of an assignment.
+   */
+  async getAccountAssignment(accountID, resolved = false) {
+    try {
+      return await this.#get(
+        `/assignments?accounts=${accountID}&resolved=${resolved}`
+      );
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  /**
+   * Get a specific host Assignment.
+   * @param {number} hostID - ID of the host to be retrieve assignments for.
+   * @param {boolean} resolved - If true, return resolved assignments.
+   * @returns {Promise} Object containing details of an assignment.
+   */
+  async getHostAssignment(hostID, resolved = false) {
+    try {
+      return await this.#get(
+        `/assignments?hosts=${hostID}&resolved=${resolved}`
+      );
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  /**
+   * Resolve an Assignment.
+   * @param {number} assignmentID - ID of the assignment to be resolved.
+   * @param {string} outcomeID - ID of the resolution outcome ("1" - Benign True Positive, "2" - Malicious True Positive, "3" - False Positive).
+   * @returns {Promise} Object containing details of an assignment.
+   */
+  async resolveAssignment(assignmentID, outcomeID) {
+    try {
+      return await this.#put(`/assignments/${assignmentID}/resolve`, {
+        outcome: outcomeID,
+      });
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  /**
    * Get a list of all user accounts in the system.
    * @returns {Promise} Array of objects containing details of all user accounts.
    */
   async getUsers() {
     try {
-      return await this.#get(`/users`);
+      let results = [];
+      let data = {
+        next: `/users`,
+      };
+
+      while (data.next) {
+        data = await this.#get(
+          data.next.replace(/.*vectra.ai\/api\/v3[^\/]*/, ""),
+          true
+        );
+        results = results.concat(data.results);
+      }
+
+      return results;
     } catch (err) {
       throw err;
     }
@@ -1039,6 +1100,23 @@ module.exports = class SaasClient {
   }
 
   /**
+   * Assign a host to a specific user.
+   * @param {number} hostID - ID of the host to be assigned.
+   * @param {number} userID - ID of the user the host will be assigned to.
+   * @returns {Promise} Object containing details of the assignment.
+   */
+  async assignHost(hostID, userID) {
+    try {
+      return await this.#post(`/assignments`, {
+        assign_host_id: hostID,
+        assign_to_user_id: userID,
+      });
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  /**
    * Modify or reassign an existing assignment.
    * @param {number} assignmentID - ID of the assignment to be modified.
    * @param {number} accountID - ID of the account to be assigned.
@@ -1061,7 +1139,7 @@ module.exports = class SaasClient {
    * @param {number} assignmentID - ID of the assignment to be deleted.
    * @returns {Promise} Object containing details of the deleted assignment.
    */
-  async modifyAssignment(assignmentID) {
+  async removeAssignment(assignmentID) {
     try {
       return await this.#delete(`/assignments/${assignmentID}`);
     } catch (err) {

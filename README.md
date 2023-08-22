@@ -134,6 +134,51 @@ Assign an account to a specific user.
 
 Object containing details of the assignment.
 
+#### (async) getAccountAssignment(ruleID) → {Promise}
+
+Get a specific account Assignment details.
+
+##### Parameters:
+
+| Name        | Type    | Description                                      |
+| ----------- | ------- | ------------------------------------------------ |
+| `accountID` | number  | The ID of the account.                           |
+| `resolved`  | boolean | If this should also return resolved assignments. |
+
+##### Returns:
+
+Object containing details of the account assignments.
+
+#### (async) getHostAssignment(ruleID) → {Promise}
+
+Get a specific host Assignment details.
+
+##### Parameters:
+
+| Name       | Type    | Description                                      |
+| ---------- | ------- | ------------------------------------------------ |
+| `hostID`   | number  | The ID of the host.                              |
+| `resolved` | boolean | If this should also return resolved assignments. |
+
+##### Returns:
+
+Object containing details of the account assignments.
+
+#### (async) assignHost(accountID, userID) → {Promise}
+
+Assign a host to a specific user.
+
+##### Parameters:
+
+| Name     | Type   | Description                                     |
+| -------- | ------ | ----------------------------------------------- |
+| `hostID` | number | ID of the host to be assigned.                  |
+| `userID` | number | ID of the user the account will be assigned to. |
+
+##### Returns:
+
+Object containing details of the assignment.
+
 #### (async) clearAccountTags(accountID) → {Promise}
 
 Clear all tags from a specific account.
@@ -573,7 +618,7 @@ Modify or reassign an existing assignment.
 
 Object containing details of the modified assignment.
 
-#### (async) modifyAssignment(assignmentID) → {Promise}
+#### (async) removeAssignment(assignmentID) → {Promise}
 
 Delete an existing assignment.
 
