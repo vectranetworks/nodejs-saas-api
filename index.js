@@ -39,7 +39,7 @@ module.exports = class SaasClient {
     try {
       const token = Buffer.from(
         `${this.#clientID}:${this.#secret}`,
-        "utf8"
+        "utf8",
       ).toString("base64");
       let data = await axios({
         url: `${this.#siteURL}/oauth2/token`,
@@ -199,7 +199,7 @@ module.exports = class SaasClient {
       };
       while (data.remaining_count > 0) {
         data = await this.#get(
-          `/events/account_scoring?limit=1000&from=${data.next_checkpoint}`
+          `/events/account_scoring?limit=1000&from=${data.next_checkpoint}`,
         );
         results = results.concat(data.events);
       }
@@ -216,10 +216,10 @@ module.exports = class SaasClient {
   async getLatestAccountCheckpoint() {
     try {
       let data = await this.#get(
-        `/events/account_scoring?limit=1000&from=999999999999`
+        `/events/account_scoring?limit=1000&from=999999999999`,
       );
       data = await this.#get(
-        `/events/account_scoring?limit=1000&from=${data.next_checkpoint}`
+        `/events/account_scoring?limit=1000&from=${data.next_checkpoint}`,
       );
       return data.next_checkpoint;
     } catch (err) {
@@ -234,10 +234,10 @@ module.exports = class SaasClient {
   async getLatestDetectionCheckpoint() {
     try {
       let data = await this.#get(
-        `/events/account_detection?limit=1000&from=999999999999`
+        `/events/account_detection?limit=1000&from=999999999999`,
       );
       data = await this.#get(
-        `/events/account_detection?limit=1000&from=${data.next_checkpoint}`
+        `/events/account_detection?limit=1000&from=${data.next_checkpoint}`,
       );
       return data.next_checkpoint;
     } catch (err) {
@@ -259,7 +259,7 @@ module.exports = class SaasClient {
       };
       while (data.remaining_count > 0) {
         data = await this.#get(
-          `/events/account_detection?limit=1000&from=${data.next_checkpoint}`
+          `/events/account_detection?limit=1000&from=${data.next_checkpoint}`,
         );
         results = results.concat(data.events);
       }
@@ -297,7 +297,7 @@ module.exports = class SaasClient {
       while (data.next) {
         data = await this.#get(
           data.next.replace(/.*vectra.ai\/api\/v3[^\/]*/, ""),
-          true
+          true,
         );
         results = results.concat(data.results);
       }
@@ -328,7 +328,7 @@ module.exports = class SaasClient {
       while (data.next) {
         data = await this.#get(
           data.next.replace(/.*vectra.ai\/api\/v3[^\/]*/, ""),
-          true
+          true,
         );
         results = results.concat(data.results);
       }
@@ -572,7 +572,7 @@ module.exports = class SaasClient {
       while (data.next) {
         data = await this.#get(
           data.next.replace(/.*vectra.ai\/api\/v3[^\/]*/, ""),
-          true
+          true,
         );
         results = results.concat(data.results);
       }
@@ -603,7 +603,7 @@ module.exports = class SaasClient {
       while (data.next) {
         data = await this.#get(
           data.next.replace(/.*vectra.ai\/api\/v3[^\/]*/, ""),
-          true
+          true,
         );
         results = results.concat(data.results);
       }
@@ -973,7 +973,7 @@ module.exports = class SaasClient {
       while (data.next) {
         data = await this.#get(
           data.next.replace(/.*vectra.ai\/api\/v3[^\/]*/, ""),
-          true
+          true,
         );
         results = results.concat(data.results);
       }
@@ -1005,7 +1005,7 @@ module.exports = class SaasClient {
   async getAccountAssignment(accountID, resolved = false) {
     try {
       return await this.#get(
-        `/assignments?accounts=${accountID}&resolved=${resolved}`
+        `/assignments?accounts=${accountID}&resolved=${resolved}`,
       );
     } catch (err) {
       throw err;
@@ -1021,7 +1021,7 @@ module.exports = class SaasClient {
   async getHostAssignment(hostID, resolved = false) {
     try {
       return await this.#get(
-        `/assignments?hosts=${hostID}&resolved=${resolved}`
+        `/assignments?hosts=${hostID}&resolved=${resolved}`,
       );
     } catch (err) {
       throw err;
@@ -1058,7 +1058,7 @@ module.exports = class SaasClient {
       while (data.next) {
         data = await this.#get(
           data.next.replace(/.*vectra.ai\/api\/v3[^\/]*/, ""),
-          true
+          true,
         );
         results = results.concat(data.results);
       }
@@ -1142,6 +1142,46 @@ module.exports = class SaasClient {
   async removeAssignment(assignmentID) {
     try {
       return await this.#delete(`/assignments/${assignmentID}`);
+    } catch (err) {
+      throw err;
+    }
+  }
+  /**
+   * Applies a lockdown status update to an entity of a specific type.
+   * @param {string} statusUpdate - The action to be performed on the entity, e.g., 'lock' or 'unlock'.
+   * @param {string} entityType - The type of entity being updated, e.g., 'host' or 'account'.
+   * @param {number} entityID - ID of the entity to be updated.
+   * @returns {Promise<Object>} - Object containing details of the updated item.
+   * @throws {Error} - If the request fails.
+   */
+  async applyLockStatus(statusUpdate, entityType, entityID) {
+    if (!statusUpdate || !entityType || typeof entityID !== "number") {
+      throw new Error(
+        "Invalid arguments: statusUpdate, entityType, and entityID are required.",
+      );
+    }
+    try {
+      let postData = {
+        lock_status: statusUpdate,
+        entity_type: entityType,
+        id: entityID,
+      };
+      return await this.#post(`/lockdown`, postData);
+    } catch (err) {
+      throw err;
+    }
+  }
+  /**
+   * Return current lockdowns and recent unlocks
+   * @param {string} entityType - The type of entity you wish to see updates for, eg. 'host' or 'account
+   * @returns {Promise} Object containing all the lock and unlocks.
+   */
+  async getLockStatus(entityType) {
+    try {
+      const lockStatus = await this.#get(
+        `/lockdown?forwarder=1&entity_type=${entityType}`,
+      );
+      return lockStatus.data;
     } catch (err) {
       throw err;
     }

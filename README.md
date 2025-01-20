@@ -48,14 +48,14 @@ Creates a new SaaS Client Object.
 
 #### new SaaSClient(siteURL, clientID, secret, version)
 
-##### Parameters:
+##### Parameters
 
-| Name       | Type   | Description                                                                              |
-| ---------- | ------ | ---------------------------------------------------------------------------------------- |
-| `siteURL`  | string | The URL Where your SaaS Brain is located. e.g. https://000000000000.foo.portal.vectra.ai |
-| `clientID` | string | OAuth Client ID. Generated in Manage/API Clients.                                        |
-| `secret`   | string | OAuth Secret. Generated in Manage/API Clients.                                           |
-| `version`  | number | API Version number. Defaults to 3. 3.3 and above support Hosts endpoints                 |
+| Name       | Type   | Description                                                                                |
+| ---------- | ------ | ------------------------------------------------------------------------------------------ |
+| `siteURL`  | string | The URL Where your SaaS Brain is located. e.g. <https://000000000000.foo.portal.vectra.ai> |
+| `clientID` | string | OAuth Client ID. Generated in Manage/API Clients.                                          |
+| `secret`   | string | OAuth Secret. Generated in Manage/API Clients.                                             |
+| `version`  | number | API Version number. Defaults to 3. 3.3 and above support Hosts endpoints                   |
 
 ### Methods
 
@@ -63,14 +63,14 @@ Creates a new SaaS Client Object.
 
 Add a note to a specific account.
 
-##### Parameters:
+##### Parameters
 
 | Name        | Type   | Description                |
 | ----------- | ------ | -------------------------- |
 | `accountID` | number | The ID of the account.     |
 | `note`      | text   | The text body of the note. |
 
-##### Returns:
+##### Returns
 
 Object containing details of the new note.
 
@@ -78,14 +78,14 @@ Object containing details of the new note.
 
 Add tags to an account.
 
-##### Parameters:
+##### Parameters
 
 | Name        | Type         | Description            |
 | ----------- | ------------ | ---------------------- |
 | `accountID` | number       | The ID of the account. |
 | `tags`      | Array.<text> | Array of tags to add.  |
 
-##### Returns:
+##### Returns
 
 Object containing details of the new tags.
 
@@ -93,14 +93,14 @@ Object containing details of the new tags.
 
 Add a note to a specific detection.
 
-##### Parameters:
+##### Parameters
 
 | Name          | Type   | Description                |
 | ------------- | ------ | -------------------------- |
 | `detectionID` | number | The ID of the detection.   |
 | `note`        | text   | The text body of the note. |
 
-##### Returns:
+##### Returns
 
 Object containing details of the new note.
 
@@ -108,14 +108,14 @@ Object containing details of the new note.
 
 Add tags to a detection.
 
-##### Parameters:
+##### Parameters
 
 | Name          | Type         | Description              |
 | ------------- | ------------ | ------------------------ |
 | `detectionID` | number       | The ID of the detection. |
 | `tags`        | Array.<text> | Array of tags to add.    |
 
-##### Returns:
+##### Returns
 
 Object containing details of the new tags.
 
@@ -123,14 +123,14 @@ Object containing details of the new tags.
 
 Assign an account to a specific user.
 
-##### Parameters:
+##### Parameters
 
 | Name        | Type   | Description                                     |
 | ----------- | ------ | ----------------------------------------------- |
 | `accountID` | number | ID of the account to be assigned.               |
 | `userID`    | number | ID of the user the account will be assigned to. |
 
-##### Returns:
+##### Returns
 
 Object containing details of the assignment.
 
@@ -138,14 +138,14 @@ Object containing details of the assignment.
 
 Get a specific account Assignment details.
 
-##### Parameters:
+##### Parameters
 
 | Name        | Type    | Description                                      |
 | ----------- | ------- | ------------------------------------------------ |
 | `accountID` | number  | The ID of the account.                           |
 | `resolved`  | boolean | If this should also return resolved assignments. |
 
-##### Returns:
+##### Returns
 
 Object containing details of the account assignments.
 
@@ -153,14 +153,14 @@ Object containing details of the account assignments.
 
 Get a specific host Assignment details.
 
-##### Parameters:
+##### Parameters
 
 | Name       | Type    | Description                                      |
 | ---------- | ------- | ------------------------------------------------ |
 | `hostID`   | number  | The ID of the host.                              |
 | `resolved` | boolean | If this should also return resolved assignments. |
 
-##### Returns:
+##### Returns
 
 Object containing details of the account assignments.
 
@@ -168,14 +168,14 @@ Object containing details of the account assignments.
 
 Assign a host to a specific user.
 
-##### Parameters:
+##### Parameters
 
 | Name     | Type   | Description                                     |
 | -------- | ------ | ----------------------------------------------- |
 | `hostID` | number | ID of the host to be assigned.                  |
 | `userID` | number | ID of the user the account will be assigned to. |
 
-##### Returns:
+##### Returns
 
 Object containing details of the assignment.
 
@@ -183,13 +183,13 @@ Object containing details of the assignment.
 
 Clear all tags from a specific account.
 
-##### Parameters:
+##### Parameters
 
 | Name        | Type   | Description            |
 | ----------- | ------ | ---------------------- |
 | `accountID` | number | The ID of the account. |
 
-##### Returns:
+##### Returns
 
 Object containing details of the cleared tags.
 
@@ -197,13 +197,13 @@ Object containing details of the cleared tags.
 
 Clear all tags from a specific detection.
 
-##### Parameters:
+##### Parameters
 
 | Name          | Type   | Description              |
 | ------------- | ------ | ------------------------ |
 | `detectionID` | number | The ID of the detection. |
 
-##### Returns:
+##### Returns
 
 Object containing details of the cleared tags.
 
@@ -211,13 +211,13 @@ Object containing details of the cleared tags.
 
 Create a triage rule.
 
-##### Parameters:
+##### Parameters
 
 | Name   | Type   | Description                                     |
 | ------ | ------ | ----------------------------------------------- |
 | `rule` | object | JSON object containing the triage rule details. |
 
-##### Returns:
+##### Returns
 
 Object containing details of the new triage rule.
 
@@ -225,14 +225,14 @@ Object containing details of the new triage rule.
 
 Delete a specific note for an account.
 
-##### Parameters:
+##### Parameters
 
 | Name        | Type   | Description            |
 | ----------- | ------ | ---------------------- |
 | `accountID` | number | The ID of the account. |
 | `noteID`    | number | The ID of the note.    |
 
-##### Returns:
+##### Returns
 
 Object containing details of the deleted note.
 
@@ -240,14 +240,14 @@ Object containing details of the deleted note.
 
 Delete a tag from a specific account.
 
-##### Parameters:
+##### Parameters
 
 | Name        | Type   | Description                     |
 | ----------- | ------ | ------------------------------- |
 | `accountID` | number | The ID of the account.          |
 | `tag`       | text   | Value of the tag to be deleted. |
 
-##### Returns:
+##### Returns
 
 Object containing details of the deleted tag.
 
@@ -255,14 +255,14 @@ Object containing details of the deleted tag.
 
 Delete a specific note for a detection.
 
-##### Parameters:
+##### Parameters
 
 | Name          | Type   | Description              |
 | ------------- | ------ | ------------------------ |
 | `detectionID` | number | The ID of the detection. |
 | `noteID`      | number | The ID of the note.      |
 
-##### Returns:
+##### Returns
 
 Object containing details of the deleted note.
 
@@ -270,14 +270,14 @@ Object containing details of the deleted note.
 
 Delete a tag from a specific detection.
 
-##### Parameters:
+##### Parameters
 
 | Name          | Type   | Description                     |
 | ------------- | ------ | ------------------------------- |
 | `detectionID` | number | The ID of the detection.        |
 | `tag`         | text   | Value of the tag to be deleted. |
 
-##### Returns:
+##### Returns
 
 Object containing details of the deleted tag.
 
@@ -285,13 +285,13 @@ Object containing details of the deleted tag.
 
 Delete an existing triage rule.
 
-##### Parameters:
+##### Parameters
 
 | Name     | Type   | Description                   |
 | -------- | ------ | ----------------------------- |
 | `ruleID` | number | ID of the rule to be deleted. |
 
-##### Returns:
+##### Returns
 
 Object containing details of the deleted triage rule.
 
@@ -299,14 +299,14 @@ Object containing details of the deleted triage rule.
 
 Filter detections with a specific value.
 
-##### Parameters:
+##### Parameters
 
 | Name           | Type           | Description                                   |
 | -------------- | -------------- | --------------------------------------------- |
 | `detectionIDs` | Array.<number> | Array of detection IDs to be marked as fixed. |
 | `value`        | text           | Value of the new detection subject.           |
 
-##### Returns:
+##### Returns
 
 Object containing details of filtered detections.
 
@@ -314,13 +314,13 @@ Object containing details of filtered detections.
 
 Return a specific account based on the ID
 
-##### Parameters:
+##### Parameters
 
 | Name        | Type   | Description        |
 | ----------- | ------ | ------------------ |
 | `accountID` | number | ID of the account. |
 
-##### Returns:
+##### Returns
 
 Object containing all the data on the account.
 
@@ -328,13 +328,13 @@ Object containing all the data on the account.
 
 Return accounts based on an array of account IDs
 
-##### Parameters:
+##### Parameters
 
 | Name         | Type     | Description          |
 | ------------ | -------- | -------------------- |
 | `accountIDs` | number[] | IDs of the accounts. |
 
-##### Returns:
+##### Returns
 
 Array containing all accounts specified.
 
@@ -342,13 +342,13 @@ Array containing all accounts specified.
 
 Get account changes from a specific checkpoint
 
-##### Parameters:
+##### Parameters
 
 | Name         | Type   | Attributes | Default | Description                                             |
 | ------------ | ------ | ---------- | ------- | ------------------------------------------------------- |
 | `checkpoint` | number | optional   | 0       | Starting point to retrieve changes from (0 by default). |
 
-##### Returns:
+##### Returns
 
 Array containing all account changes since the provided checkpoint.
 
@@ -356,14 +356,14 @@ Array containing all account changes since the provided checkpoint.
 
 Return a specific note for an account.
 
-##### Parameters:
+##### Parameters
 
 | Name        | Type   | Description            |
 | ----------- | ------ | ---------------------- |
 | `accountID` | number | The ID of the account. |
 | `noteID`    | number | The ID of the note.    |
 
-##### Returns:
+##### Returns
 
 Object containing details of the note.
 
@@ -371,13 +371,13 @@ Object containing details of the note.
 
 Return the notes for a specific account.
 
-##### Parameters:
+##### Parameters
 
 | Name        | Type   | Description            |
 | ----------- | ------ | ---------------------- |
 | `accountID` | number | The ID of the account. |
 
-##### Returns:
+##### Returns
 
 Array of objects containing details of the notes.
 
@@ -385,13 +385,13 @@ Array of objects containing details of the notes.
 
 Get tags for a specific account.
 
-##### Parameters:
+##### Parameters
 
 | Name        | Type   | Description            |
 | ----------- | ------ | ---------------------- |
 | `accountID` | number | The ID of the account. |
 
-##### Returns:
+##### Returns
 
 Array of tags in text form.
 
@@ -399,13 +399,13 @@ Array of tags in text form.
 
 Return all accounts
 
-##### Parameters:
+##### Parameters
 
 | Name      | Type   | Description     |
 | --------- | ------ | --------------- |
 | `options` | object | Search options. |
 
-##### Returns:
+##### Returns
 
 Array containing all account objects.
 
@@ -413,13 +413,13 @@ Array containing all account objects.
 
 Return all detections
 
-##### Parameters:
+##### Parameters
 
 | Name      | Type   | Description     |
 | --------- | ------ | --------------- |
 | `options` | object | Search options. |
 
-##### Returns:
+##### Returns
 
 Array containing all detection objects.
 
@@ -427,13 +427,13 @@ Array containing all detection objects.
 
 Get a specific account Assignment.
 
-##### Parameters:
+##### Parameters
 
 | Name           | Type   | Description                           |
 | -------------- | ------ | ------------------------------------- |
 | `assignmentID` | number | ID of the assignment to be retrieved. |
 
-##### Returns:
+##### Returns
 
 Object containing details of an assignment.
 
@@ -441,7 +441,7 @@ Object containing details of an assignment.
 
 Get all account Assignments.
 
-##### Returns:
+##### Returns
 
 Array of objects containing details of assignments.
 
@@ -449,13 +449,13 @@ Array of objects containing details of assignments.
 
 Return a specific detection based on the ID
 
-##### Parameters:
+##### Parameters
 
 | Name          | Type   | Description          |
 | ------------- | ------ | -------------------- |
 | `detectionID` | number | ID of the detection. |
 
-##### Returns:
+##### Returns
 
 Object containing all the data on the detection.
 
@@ -463,13 +463,13 @@ Object containing all the data on the detection.
 
 Return detections based on an array of detection IDs
 
-##### Parameters:
+##### Parameters
 
 | Name           | Type     | Description            |
 | -------------- | -------- | ---------------------- |
 | `detectionIDs` | number[] | IDs of the detections. |
 
-##### Returns:
+##### Returns
 
 Array containing all detections specified.
 
@@ -477,13 +477,13 @@ Array containing all detections specified.
 
 Get detection changes from a specific checkpoint
 
-##### Parameters:
+##### Parameters
 
 | Name         | Type   | Attributes | Default | Description                                             |
 | ------------ | ------ | ---------- | ------- | ------------------------------------------------------- |
 | `checkpoint` | number | optional   | 0       | Starting point to retrieve changes from (0 by default). |
 
-##### Returns:
+##### Returns
 
 Array containing all account changes since the provided checkpoint.
 
@@ -491,14 +491,14 @@ Array containing all account changes since the provided checkpoint.
 
 Return a specific note for a detection.
 
-##### Parameters:
+##### Parameters
 
 | Name          | Type   | Description              |
 | ------------- | ------ | ------------------------ |
 | `detectionID` | number | The ID of the detection. |
 | `noteID`      | number | The ID of the note.      |
 
-##### Returns:
+##### Returns
 
 Object containing details of the note.
 
@@ -506,13 +506,13 @@ Object containing details of the note.
 
 Return the notes for a specific detection.
 
-##### Parameters:
+##### Parameters
 
 | Name          | Type   | Description              |
 | ------------- | ------ | ------------------------ |
 | `detectionID` | number | The ID of the detection. |
 
-##### Returns:
+##### Returns
 
 Array of objects containing details of the notes.
 
@@ -520,13 +520,13 @@ Array of objects containing details of the notes.
 
 Get tags for a specific detection.
 
-##### Parameters:
+##### Parameters
 
 | Name          | Type   | Description              |
 | ------------- | ------ | ------------------------ |
 | `detectionID` | number | The ID of the detection. |
 
-##### Returns:
+##### Returns
 
 Array of tags in text form.
 
@@ -534,13 +534,13 @@ Array of tags in text form.
 
 Get a single triage rule by ID.
 
-##### Parameters:
+##### Parameters
 
 | Name     | Type   | Description            |
 | -------- | ------ | ---------------------- |
 | `ruleID` | number | The ID of the account. |
 
-##### Returns:
+##### Returns
 
 Object containing details of the triage rule.
 
@@ -548,7 +548,7 @@ Object containing details of the triage rule.
 
 Return all triage rules on the brain.
 
-##### Returns:
+##### Returns
 
 Array of objects containing details of the triage rules.
 
@@ -556,7 +556,7 @@ Array of objects containing details of the triage rules.
 
 Get a list of all user accounts in the system.
 
-##### Returns:
+##### Returns
 
 Array of objects containing details of all user accounts.
 
@@ -564,13 +564,13 @@ Array of objects containing details of all user accounts.
 
 Get a list of all user accounts in the system.
 
-##### Parameters:
+##### Parameters
 
 | Name     | Type   | Description                             |
 | -------- | ------ | --------------------------------------- |
 | `userID` | number | ID of the user account to be retrieved. |
 
-##### Returns:
+##### Returns
 
 Array of objects containing details of all user accounts.
 
@@ -578,13 +578,13 @@ Array of objects containing details of all user accounts.
 
 Get a list of all user accounts in the system.
 
-##### Parameters:
+##### Parameters
 
 | Name     | Type   | Description                             |
 | -------- | ------ | --------------------------------------- |
 | `userID` | number | ID of the user account to be retrieved. |
 
-##### Returns:
+##### Returns
 
 Array of objects containing details of all user accounts.
 
@@ -592,13 +592,13 @@ Array of objects containing details of all user accounts.
 
 Mark specific detections as fixed.
 
-##### Parameters:
+##### Parameters
 
 | Name           | Type           | Description                                   |
 | -------------- | -------------- | --------------------------------------------- |
 | `detectionIDs` | Array.<number> | Array of detection IDs to be marked as fixed. |
 
-##### Returns:
+##### Returns
 
 Object containing details of fixed detections.
 
@@ -606,7 +606,7 @@ Object containing details of fixed detections.
 
 Modify or reassign an existing assignment.
 
-##### Parameters:
+##### Parameters
 
 | Name           | Type   | Description                                     |
 | -------------- | ------ | ----------------------------------------------- |
@@ -614,7 +614,7 @@ Modify or reassign an existing assignment.
 | `accountID`    | number | ID of the account to be assigned.               |
 | `userID`       | number | ID of the user the account will be assigned to. |
 
-##### Returns:
+##### Returns
 
 Object containing details of the modified assignment.
 
@@ -622,13 +622,13 @@ Object containing details of the modified assignment.
 
 Delete an existing assignment.
 
-##### Parameters:
+##### Parameters
 
 | Name           | Type   | Description                         |
 | -------------- | ------ | ----------------------------------- |
 | `assignmentID` | number | ID of the assignment to be deleted. |
 
-##### Returns:
+##### Returns
 
 Object containing details of the deleted assignment.
 
@@ -636,7 +636,7 @@ Object containing details of the deleted assignment.
 
 Updated a specific note for an account.
 
-##### Parameters:
+##### Parameters
 
 | Name        | Type   | Description                            |
 | ----------- | ------ | -------------------------------------- |
@@ -644,7 +644,7 @@ Updated a specific note for an account.
 | `noteID`    | number | The ID of the note.                    |
 | `note`      | text   | The text body to update the note with. |
 
-##### Returns:
+##### Returns
 
 Object containing details of the new note.
 
@@ -652,7 +652,7 @@ Object containing details of the new note.
 
 Updated a specific note for a detection.
 
-##### Parameters:
+##### Parameters
 
 | Name          | Type   | Description                            |
 | ------------- | ------ | -------------------------------------- |
@@ -660,7 +660,7 @@ Updated a specific note for a detection.
 | `noteID`      | number | The ID of the note.                    |
 | `note`        | text   | The text body to update the note with. |
 
-##### Returns:
+##### Returns
 
 Object containing details of the new note.
 
@@ -668,13 +668,43 @@ Object containing details of the new note.
 
 Update an existing triage rule.
 
-##### Parameters:
+##### Parameters
 
 | Name     | Type   | Description                                         |
 | -------- | ------ | --------------------------------------------------- |
 | `ruleID` | number | ID of the rule to be updated.                       |
 | `rule`   | object | JSON object containing the new triage rule details. |
 
-##### Returns:
+##### Returns
 
 Object containing details of the updated triage rule.
+
+#### (async) applyLockStatus(statusUpdate, entityType, entityID → {Promise}
+
+Apply a lock status to an entity
+
+##### Parameters
+
+| Name           | Type   | Description                                                         |
+| -------------- | ------ | ------------------------------------------------------------------- |
+| `statusUpdate` | text   | The action to be performed on the entity, e.g., 'lock' or 'unlock'. |
+| `entityType`   | text   | The type of entity to be updated (host/account)                     |
+| `entityID`     | number | ID of the entity to be updated.                                     |
+
+##### Returns
+
+Object containing details of the updated entity.
+
+#### (async) getLockStatus(entityType)
+
+Return current lockdowns and recent unlocks
+
+##### Parameters
+
+| Name         | Type | Description                                                            |
+| ------------ | ---- | ---------------------------------------------------------------------- |
+| `entityType` | text | The type of entity you wish to see updates for, eg. 'host' or 'account |
+
+##### Returns
+
+Object containing details of the recently locked and unlocked entities
